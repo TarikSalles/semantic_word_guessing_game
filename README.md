@@ -1,204 +1,127 @@
-# 
 
-# \# Jogo de Adivinhação Semântica com Word Embeddings
+# Jogo de Adivinhação Semântica com Word Embeddings
 
-# 
+Este projeto apresenta uma exploração prática das propriedades geométricas de **Word Embeddings** por meio de um jogo interativo baseado em similaridade vetorial.
 
-# Este projeto apresenta uma exploração prática das propriedades geométricas de \*\*Word Embeddings\*\* por meio de um jogo interativo baseado em similaridade vetorial.
+Utilizando o modelo pré-treinado **GloVe (glove-wiki-gigaword-100)** da biblioteca `gensim`, palavras são representadas como vetores em um espaço de 100 dimensões. O objetivo do jogo é desafiar o usuário a encontrar uma palavra semanticamente próxima da soma vetorial de duas palavras fornecidas.
 
-# 
+O projeto transforma conceitos matemáticos de NLP em uma experiência interativa.
 
-# Utilizando o modelo pré-treinado \*\*GloVe (glove-wiki-gigaword-100)\*\* da biblioteca `gensim`, palavras são representadas como vetores em um espaço de 100 dimensões (embeddings). O objetivo do jogo é que o usuário a encontre uma palavra semanticamente próxima da soma vetorial de duas palavras fornecidas (os embeddings de palavras provam seguirem lógicas e associações humanas em diversos casos).
+---
 
-# 
+## Instalação
 
-# ---
+Clone o repositório:
 
-# 
+```bash
+git clone https://github.com/seu-usuario/semantic-word-guessing-game
+```
 
-# \## Instalação
+Instale as dependências:
 
-# 
+```bash
+pip install gensim numpy
+```
 
-# Clone o repositório:
+---
 
-# 
+## Fundamento Matemático
 
-# ```bash
+Cada palavra é representada como um vetor:
 
-# git clone https://github.com/TarikSalles/semantic-word-guessing-game
+w ∈ ℝ¹⁰⁰
 
-# ```
+A similaridade entre palavras é calculada utilizando **similaridade de cosseno**:
 
-# 
+cos(u, v) = (u · v) / (||u|| ||v||)
 
-# Instale as dependências:
+No jogo, duas palavras w₁ e w₂ são combinadas:
 
-# 
+v = w₁ + w₂
 
-# ```bash
+O jogador deve encontrar uma palavra w₃ tal que:
 
-# pip install -r requirements.txt
+cos(w₃, v) ≥ 0.60
 
-# ```
+Ou seja, a palavra escolhida deve estar suficientemente próxima da soma vetorial das duas palavras iniciais.
 
-# 
+---
 
-# ---
+## Estrutura do Jogo
 
-# 
+O jogo funciona da seguinte forma:
 
-# \## Fundamento Matemático
+1. Uma categoria é escolhida aleatoriamente entre:
+   - Objetos
+   - Comidas
+   - Profissões
 
-# 
+2. Duas palavras da categoria são selecionadas.
 
-# Cada palavra é representada como um vetor:
+3. O sistema verifica se existe uma terceira palavra dentro da mesma categoria cuja similaridade de cosseno com a soma vetorial seja ≥ 0.60.
 
-# 
+4. O jogador deve tentar adivinhar essa palavra.
 
-# w ∈ ℝ¹⁰⁰
+5. Caso acerte, recebe pontuação proporcional à similaridade:
 
-# 
+   Pontos = similaridade × 1000
 
-# A similaridade entre palavras é calculada utilizando \*\*similaridade de cosseno\*\*:
+6. O jogador possui 3 vidas.
 
-# 
+7. É possível chamar os jurados uma vez por rodada:
+   - 50% de chance de receber uma dica útil (palavra entre as top similares)
+   - 50% de chance de receber uma palavra aleatória
 
-# cos(u, v) = (u · v) / (||u|| ||v||)
+---
 
-# 
+## Observações Importantes
 
-# No jogo, duas palavras w₁ e w₂ são combinadas:
+Durante os testes foi observado que:
 
-# 
+- Nem sempre a soma vetorial gera uma palavra "composta" literal.
+- O modelo aprende padrões estatísticos de coocorrência.
+- Relações lineares funcionam melhor quando há forte estrutura semântica.
 
-# v = w₁ + w₂
+Exemplo observado:
 
-# 
+man + sales ≈ salesman
 
-# O jogador deve encontrar uma palavra w₃ tal que:
+Mas nem sempre a composição morfológica é capturada perfeitamente.
 
-# 
+---
 
-# cos(w₃, v) ≥ 0.60
+## Funções Principais
 
-# 
+- similaridade_cosseno()
+- achar_conjunto_palavra_semelhante()
+- get_palavras_similares()
+- pergunta()
+- ajuda_jurados()
+- jogo_adivinhacao()
 
-# Ou seja, a palavra escolhida deve estar suficientemente próxima da soma vetorial das duas palavras iniciais.
+---
 
-# 
+## Tecnologias Utilizadas
 
-# ---
+- Python
+- NumPy
+- Gensim
+- Google Colab
 
-# 
+---
 
-# \## Estrutura do Jogo
+## Possíveis Melhorias
 
-# 
+- Interface gráfica (Streamlit ou Web App)
+- Visualização PCA das palavras no espaço vetorial
+- Sistema de ranking
+- Ajuste dinâmico de dificuldade
+- Comparação com FastText (subword embeddings)
 
-# O jogo funciona da seguinte forma:
+---
 
-# 
+## Autor
 
-# 1\. Uma categoria é escolhida aleatoriamente entre:
-
-# &nbsp;  - Objetos
-
-# &nbsp;  - Comidas
-
-# &nbsp;  - Profissões
-
-# 
-
-# 2\. Duas palavras da mesma categoria são selecionadas.
-
-# 
-
-# 3\. O sistema verifica se existe uma terceira palavra cuja similaridade de cosseno com a soma vetorial seja ≥ 0.60 (todas as palavras do dicionário inglês são percorridas).
-
-# 
-
-# 4\. O jogador deve tentar adivinhar essa palavra ou uma palavra que possua pelo menos uma similaridade de 60% com essa soma vetorial.
-
-# 
-
-# 5\. Caso acerte, recebe pontuação proporcional à similaridade:
-
-# 
-
-# &nbsp;  Pontos = similaridade × 1000
-
-# 
-
-# 6\. O jogador possui 3 vidas.
-
-# 
-
-# 7\. É possível chamar os jurados uma única vez por jogo:
-
-# &nbsp;  - 50% de chance de receber uma dica útil (palavra entre as top similares)
-
-# &nbsp;  - 50% de chance de receber uma palavra aleatória
-
-# 
-
-# ---
-
-# 
-
-# \## Observações Importantes
-
-# 
-
-# Durante os testes foi observado que:
-
-# 
-
-# \- Nem sempre a soma vetorial gera uma palavra composta literal.
-
-# \- O modelo aprende padrões estatísticos de coocorrência e às vezes palavras semelhantes não fazem sentido direto.
-
-# \- Relações lineares funcionam melhor quando há forte estrutura semântica.
-
-# 
-
-# Exemplo observado:
-
-# 
-
-# man + sales ≈ salesman (mais de 40% de semelhança)
-
-
-
-# computer + scientist ≈ programmer (mais de 60% de semelhança)
-
-
-
-
-
-# Mas nem sempre a composição morfológica é capturada perfeitamente.
-
-# 
-
-# 
-
-# ---
-
-# 
-
-# \## Tecnologias Utilizadas
-
-# 
-
-# \- Python
-
-# \- NumPy
-
-# \- Gensim
-
-# \- Jupyter Notebook
-
-# 
-
-
-
+Tarik Salles  
+Bacharel em Ciência da Computação  
+Explorando aplicações criativas de NLP e Representações Vetoriais.
