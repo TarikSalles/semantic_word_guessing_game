@@ -1,11 +1,8 @@
-
 # Jogo de Adivinhação Semântica com Word Embeddings
 
 Este projeto apresenta uma exploração prática das propriedades geométricas de **Word Embeddings** por meio de um jogo interativo baseado em similaridade vetorial.
 
-Utilizando o modelo pré-treinado **GloVe (glove-wiki-gigaword-100)** da biblioteca `gensim`, palavras são representadas como vetores em um espaço de 100 dimensões. O objetivo do jogo é desafiar o usuário a encontrar uma palavra semanticamente próxima da soma vetorial de duas palavras fornecidas.
-
-O projeto transforma conceitos matemáticos de NLP em uma experiência interativa.
+Utilizando o modelo pré-treinado **GloVe (glove-wiki-gigaword-100)** da biblioteca `gensim`, palavras são representadas como vetores em um espaço de 100 dimensões (embeddings). O objetivo do jogo é que o usuário a encontre uma palavra semanticamente próxima da soma vetorial de duas palavras fornecidas (os embeddings de palavras provam seguirem lógicas e associações humanas em diversos casos).
 
 ---
 
@@ -14,13 +11,13 @@ O projeto transforma conceitos matemáticos de NLP em uma experiência interativ
 Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/semantic-word-guessing-game
+git clone https://github.com/TarikSalles/semantic-word-guessing-game
 ```
 
 Instale as dependências:
 
 ```bash
-pip install gensim numpy
+pip install -r requirements.txt
 ```
 
 ---
@@ -56,11 +53,11 @@ O jogo funciona da seguinte forma:
    - Comidas
    - Profissões
 
-2. Duas palavras da categoria são selecionadas.
+2. Duas palavras da mesma categoria são selecionadas.
 
-3. O sistema verifica se existe uma terceira palavra dentro da mesma categoria cuja similaridade de cosseno com a soma vetorial seja ≥ 0.60.
+3. O sistema verifica se existe uma terceira palavra cuja similaridade de cosseno com a soma vetorial seja ≥ 0.60 (todas as palavras do dicionário inglês são percorridas).
 
-4. O jogador deve tentar adivinhar essa palavra.
+4. O jogador deve tentar adivinhar essa palavra ou uma palavra que possua pelo menos uma similaridade de 60% com essa soma vetorial.
 
 5. Caso acerte, recebe pontuação proporcional à similaridade:
 
@@ -68,7 +65,7 @@ O jogo funciona da seguinte forma:
 
 6. O jogador possui 3 vidas.
 
-7. É possível chamar os jurados uma vez por rodada:
+7. É possível chamar os jurados uma única vez por jogo:
    - 50% de chance de receber uma dica útil (palavra entre as top similares)
    - 50% de chance de receber uma palavra aleatória
 
@@ -78,26 +75,17 @@ O jogo funciona da seguinte forma:
 
 Durante os testes foi observado que:
 
-- Nem sempre a soma vetorial gera uma palavra "composta" literal.
-- O modelo aprende padrões estatísticos de coocorrência.
+- Nem sempre a soma vetorial gera uma palavra composta literal.
+- O modelo aprende padrões estatísticos de coocorrência e às vezes palavras semelhantes não fazem sentido direto.
 - Relações lineares funcionam melhor quando há forte estrutura semântica.
 
 Exemplo observado:
 
-man + sales ≈ salesman
+man + sales ≈ salesman (mais de 40% de semelhança)
+
+computer + scientist ≈ programmer (mais de 60% de semelhança)
 
 Mas nem sempre a composição morfológica é capturada perfeitamente.
-
----
-
-## Funções Principais
-
-- similaridade_cosseno()
-- achar_conjunto_palavra_semelhante()
-- get_palavras_similares()
-- pergunta()
-- ajuda_jurados()
-- jogo_adivinhacao()
 
 ---
 
@@ -106,22 +94,4 @@ Mas nem sempre a composição morfológica é capturada perfeitamente.
 - Python
 - NumPy
 - Gensim
-- Google Colab
-
----
-
-## Possíveis Melhorias
-
-- Interface gráfica (Streamlit ou Web App)
-- Visualização PCA das palavras no espaço vetorial
-- Sistema de ranking
-- Ajuste dinâmico de dificuldade
-- Comparação com FastText (subword embeddings)
-
----
-
-## Autor
-
-Tarik Salles  
-Bacharel em Ciência da Computação  
-Explorando aplicações criativas de NLP e Representações Vetoriais.
+- Jupyter Notebook
