@@ -11,7 +11,7 @@ Utilizando o modelo pré-treinado **GloVe (glove-wiki-gigaword-100)** da bibliot
 Clone o repositório:
 
 ```bash
-git clone https://github.com/TarikSalles/semantic-word-guessing-game
+git clone https://github.com/TarikSalles/semantic_word_guessing_game
 ```
 
 Instale as dependências:
